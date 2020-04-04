@@ -3,35 +3,24 @@ const bcryptjs = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 
-exports.createUser = async (req, res) => {
-
+exports.authUser = async (req, res) => {
     // check for errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    // Extract email and password
+    // Get email and psw
     const { email, password } = req.body;
 
-    console.log(req.body);
     try {
-        // Check that the user is unique
+        // Check the user is registered
         let user = await User.findOne({ email });
+        if (!user) { res.status(400).json('The user does not exists'); }
 
-        if (user) {
-            return res.status(400).json({ msg: 'This user already exits' });
-        }
-
-        // create user
-        user = new User(req.body);
-
-        // Hash psw
-        const salt = await bcryptjs.genSalt(10);
-        user.password = await bcryptjs.hash(password, salt);
-
-        // save user
-        await user.save();
+        // check psw
+        const pswCorrect = await bcryptjs.compare(password, user.password);
+        if (!pswCorrect) { res.status(400).json('User + Password do not match'); }
 
         // Create and sign JWT
         const payload = {
@@ -53,5 +42,4 @@ exports.createUser = async (req, res) => {
     } catch (error) {
         res.status(400).send('There was a problem')
     }
-
 }
