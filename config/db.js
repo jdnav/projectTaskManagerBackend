@@ -9,9 +9,10 @@ const connectDB = async () => {
                 useUnifiedTopology: true,
                 useFindAndModify: false
             });
-            console.log('database connected.');
-            
+        console.log('database connected.');
+
     } catch (error) {
+        console.log('Could not connect to database');
         console.log(error);
         process.exit(1);    // In case of error, stop app
     }

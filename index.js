@@ -5,7 +5,7 @@ const connectDB = require('./config/db')
 const app = express();
 
 // Connect to dababase
-connectDB();
+// connectDB();
 
 // Enable express.json
 app.use(express.json({ extended: true }));
@@ -20,5 +20,5 @@ app.use('/api/projects', require('./routes/projects'));
 
 // Start server
 app.listen(PORT, () => {
-    console.log('Server running in port ${PORT}');
+    console.log(`Server running in port ${PORT}`);
 })

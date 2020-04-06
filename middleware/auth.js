@@ -12,7 +12,7 @@ module.exports = function (req, res, next) {
     // validate JWT
     try {
         const encoded = jwt.verify(token, process.env.SECRET);
-        req.user = encoded.user;
+        req.user = encoded.user; // This add user info in the "req"
         next();
     } catch (error) {
         res.status(401).json({ msg: 'Not valid JWT' })
