@@ -107,7 +107,7 @@ exports.deleteProject = async (req, res) => {
         // Delete project
         await Project.findOneAndRemove({ _id: req.params.id })
 
-        // Response updated
+        // Response delete
         res.json({ msg: 'Project deleted successfully' })
 
     } catch (error) {

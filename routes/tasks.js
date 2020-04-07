@@ -33,6 +33,7 @@ router.put('/:id',
 
 // Delete project
 router.delete('/:id',
+    auth,
     taskController.deleteTask
 );
 

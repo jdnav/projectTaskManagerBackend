@@ -113,24 +113,28 @@ exports.updateTask = async (req, res) => {
 exports.deleteTask = async (req, res) => {
 
     try {
-        // check for the id
-        // console.log(req.params.id);
-        let project = await Task.findById(req.params.id);
+        // Get params from request body
+        const { project } = req.body;
 
-        if (!project) {
-            return res.status(404).json({ msg: 'Task not found!' })
+        // Check whether task exits
+        let task = await Task.findById(req.params.id)
+        if (!task) {
+            return res.status(404).json({ msg: 'Task does not exits' })
         }
 
-        // verity project owner
-        if (project.owner.toString() != req.user.id) {
-            return res.status(401).json({ msg: 'Unauthorized' })
+        // Get project
+        const projectCheck = await Project.findById(project);
+
+        // Check whether project belongs to user loggedin
+        if (projectCheck.owner.toString() != req.user.id) {
+            return res.status(401).json({ msg: 'Unthorized' })
         }
 
-        // Delete project
+        // Delete task
         await Task.findOneAndRemove({ _id: req.params.id })
 
-        // Response updated
-        res.json({ msg: 'Task deleted successfully' })
+        // Response delete
+        res.json({ msg: 'Project deleted successfully' })
 
     } catch (error) {
         console.log(error);
