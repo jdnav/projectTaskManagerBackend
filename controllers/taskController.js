@@ -13,7 +13,7 @@ exports.createTask = async (req, res) => {
     try {
 
         // Get project id from request
-        const { project } = req.body.project;
+        const { project } = req.body;
 
         // Check project
         const projectCheck = await Project.findById(project);
@@ -44,7 +44,7 @@ exports.getTasks = async (req, res) => {
     try {
 
         // Get project id from request
-        const { project } = req.body.project;
+        const { project } = req.body;
 
         // Check project
         const projectCheck = await Project.findById(project);
@@ -76,34 +76,33 @@ exports.updateTask = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    // get project name
-    const { name } = req.body;
-
-    const newProject = {};
-
-    if (name) {
-        newProject.name = name;
-    }
-
     try {
-        // check for the id
-        // console.log(req.params.id);
-        let project = await Task.findById(req.params.id);
 
-        if (!project) {
-            return res.status(404).json({ msg: 'Task not found!' })
+        // Get params from request body
+        const { name, project, status } = req.body;
+
+        // Check whether task exits
+        let task = await Task.findById(req.params.id)
+        if (!task) {
+            return res.status(404).json({ msg: 'Task does not exits' })
         }
 
-        // verity project owner
-        if (project.owner.toString() != req.user.id) {
-            return res.status(401).json({ msg: 'Not authorized' })
+        // Get project
+        const projectCheck = await Project.findById(project);
+
+        // Check whether project belongs to user loggedin
+        if (projectCheck.owner.toString() != req.user.id) {
+            return res.status(401).json({ msg: 'Unthorized' })
         }
 
-        // update
-        project = await Task.findByIdAndUpdate({ _id: req.params.id }, { $set: newProject }, { new: true });
+        // Create object with new info
+        const newTask = {};
+        if (nombre) newTask.name = name;
+        if (status) newTask.status = status;
 
-        // Response updated
-        res.json({ project })
+        // Update task
+        task = await Task.findOneAndUpdate({ _id: res.params.id }, newTask, { new: true });
+        res.json({ task })
 
     } catch (error) {
         console.log(error);
