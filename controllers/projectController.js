@@ -39,7 +39,8 @@ exports.getProjects = async (req, res) => {
         res.json(projects);
 
     } catch (error) {
-        res.status(400).send('There was a problem')
+        console.log(error);
+        res.status(500).send('There was a problem')
     }
 }
 
@@ -82,6 +83,35 @@ exports.updateProject = async (req, res) => {
         res.json({ project })
 
     } catch (error) {
-        res.status(400).send('There was a problem')
+        console.log(error);
+        res.status(500).send('There was a problem')
+    }
+}
+
+exports.deleteProject = async (req, res) => {
+
+    try {
+        // check for the id
+        // console.log(req.params.id);
+        let project = await Project.findById(req.params.id);
+
+        if (!project) {
+            return res.status(404).json({ msg: 'Project not found!' })
+        }
+
+        // verity project owner
+        if (project.owner.toString() != req.user.id) {
+            return res.status(401).json({ msg: 'Unauthorized' })
+        }
+
+        // Delete project
+        await Project.findOneAndRemove({ _id: req.params.id })
+
+        // Response updated
+        res.json({ msg: 'Project deleted successfully' })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('There was a problem')
     }
 }
