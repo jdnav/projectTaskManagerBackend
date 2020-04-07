@@ -71,9 +71,9 @@ exports.updateProject = async (req, res) => {
             return res.status(404).json({ msg: 'Project not found!' })
         }
 
-        // verity project owner
+        // verify project owner
         if (project.owner.toString() != req.user.id) {
-            return res.status(401).json({ msg: 'Not authorized' })
+            return res.status(401).json({ msg: 'Unauthorized' })
         }
 
         // update
