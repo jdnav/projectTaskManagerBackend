@@ -40,3 +40,14 @@ exports.authUser = async (req, res) => {
         res.status(400).send('There was a problem');
     }
 }
+
+// It gets the user who is alreade authenticated
+exports.userAuthenticated = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        res.json({ user });
+    } catch (error) {
+        // console.log(error);
+        res.status(500).json({ msg: 'There was an error' })
+    }
+}
