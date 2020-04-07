@@ -59,6 +59,7 @@ exports.getTasks = async (req, res) => {
 
         // Get tasks from project
         const tasks = await Task.find({ project });
+        res.json({ tasks });
 
     } catch (error) {
         console.log(error);
