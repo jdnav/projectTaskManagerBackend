@@ -52,7 +52,6 @@ exports.updateProject = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-
     // get project name
     const { name } = req.body;
 
@@ -64,12 +63,23 @@ exports.updateProject = async (req, res) => {
 
     try {
         // check for the id
+        // console.log(req.params.id);
+        let project = await Project.findById(req.params.id);
 
-        // check whether project exits
+        if (!project) {
+            return res.status(404).json({ msg: 'Project not found!' })
+        }
 
         // verity project owner
+        if (project.owner.toString() != req.user.id) {
+            return res.status(401).json({ msg: 'Not authorized' })
+        }
 
         // update
+        project = await Project.findByIdAndUpdate({ _id: req.params.id }, { $set: newProject }, { new: true });
+
+        // Response updated
+        res.json({ project })
 
     } catch (error) {
         res.status(400).send('There was a problem')

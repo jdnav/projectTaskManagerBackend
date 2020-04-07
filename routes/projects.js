@@ -30,4 +30,9 @@ router.put('/:id',
     function (req, res) { projectController.updateProject(req, res) }
 );
 
+// Delete project
+router.put('/:id',
+    projectController.deleteProject
+);
+
 module.exports = router;
