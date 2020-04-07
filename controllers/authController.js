@@ -30,16 +30,13 @@ exports.authUser = async (req, res) => {
         };
 
         jwt.sign(payload, process.env.SECRET, {
-            expiresIn: 3600 //1h
+            expiresIn: 3600 // 1h
         }, (error, token) => {
             if (error) throw error;
             res.json({ token })
         });
 
-        // Response
-        res.send('User created successfully')
-
     } catch (error) {
-        res.status(400).send('There was a problem')
+        res.status(400).send('There was a problem');
     }
 }

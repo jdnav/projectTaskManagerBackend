@@ -32,9 +32,8 @@ exports.createTask = async (req, res) => {
         res.json({ task });
 
 
-
     } catch (error) {
-        res.status(400).send('There was a problem')
+        res.status(500).send('There was a problem')
     }
 }
 

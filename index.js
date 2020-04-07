@@ -5,7 +5,7 @@ const connectDB = require('./config/db')
 const app = express();
 
 // Connect to dababase
-// connectDB();
+connectDB();
 
 // Enable express.json
 app.use(express.json({ extended: true }));

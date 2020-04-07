@@ -9,7 +9,7 @@ const connectDB = async () => {
                 useUnifiedTopology: true,
                 useFindAndModify: false
             });
-        console.log('database connected.');
+        console.log('Database connected!');
 
     } catch (error) {
         console.log('Could not connect to database');
@@ -18,5 +18,17 @@ const connectDB = async () => {
     }
 
 }
+
+/*
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://mongoPTR:<password>@clusterptm-ja7bx.mongodb.net/test?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true });
+client.connect(err => {
+  const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  client.close();
+});
+
+*/
 
 module.exports = connectDB;
