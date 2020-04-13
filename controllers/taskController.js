@@ -42,8 +42,8 @@ exports.getTasks = async (req, res) => {
 
     try {
 
-        // Get project id from request
-        const { project } = req.body;
+        // Get project id from PARAMS
+        const { project } = req.query;
 
         // Check project
         const projectCheck = await Project.findById(project);
@@ -57,7 +57,7 @@ exports.getTasks = async (req, res) => {
         }
 
         // Get tasks from project
-        const tasks = await Task.find({ project });
+        const tasks = await Task.find({ project }).sort({registerDate: -1});
         res.json({ tasks });
 
     } catch (error) {
